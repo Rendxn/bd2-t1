@@ -20,7 +20,6 @@ DECLARE
     pigs_str         VARCHAR2(2000);
     truck_str        VARCHAR2(2000);
 
-
 BEGIN
     -- User input
     requested_weight := : requested_weight;
