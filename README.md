@@ -12,7 +12,7 @@ Para resolver este problema, tomamos cada camión y lo interpretamos como un _0/
 
 Luego de declarar las variables, tomamos todos los cerdos y los camiones en Arrays.
 
-```plsql
+```sql
     select *
         bulk collect
     into trucks
@@ -26,7 +26,7 @@ Luego de declarar las variables, tomamos todos los cerdos y los camiones en Arra
 ```
 Una vez tenemos estos arrays, recorremos cada camión y allí generamos la matriz del problema de Knapsack, donde el peso máximo está definido así:
 
-```plsql
+```sql
     select least(trucks(t).MAXIMACAPACIDADKILOS, remaining_weight) into max_weight from dual;
 ```
 
@@ -46,7 +46,7 @@ Repetimos este procedimiento para cada camión, teniendo en cuenta los cerdos qu
 ### A
 Creamos un `COMPOUND TRIGGER`, que si bien no es necesario para este punto en específico, nos ayudará a evitar el error `ORA-04091 Mutating Table` más adelante en el literal B.
 
-```plsql
+```sql
 CREATE OR REPLACE TRIGGER individuo_insert_compound
     FOR INSERT
     ON INDIVIDUO
@@ -56,7 +56,7 @@ END individuo_insert_compound;
 ```
 En el punto de tiempo `BEFORE EACH ROW` asignamos 0 al valor de `nro_hijos` así:
 
-```plsql
+```sql
 ...
 COMPOUND TRIGGER
     BEFORE EACH ROW IS
@@ -69,7 +69,7 @@ COMPOUND TRIGGER
 ### B
 Dentro del `COMPUND TRIGGER` del punto anterior, y en el mismo punto de tiempo, agregamos a una lista todos los padres que no sean nulos y después, en el `AFTER STATEMENT` hacemos la actualización del padre (aumentando su cantidad de hijos).
 
-```plsql
+```sql
 ...
 AFTER STATEMENT IS
 BEGIN
@@ -90,7 +90,7 @@ Primero dentro del `COMPOUND TRIGGER` del punto anterior, en el `BEFORE STATEMEN
 ### E
 Fue necesario para este punto crear la siguiente tabla
 
-```plsql
+```sql
 CREATE TABLE auxiliary(
  nombre VARCHAR2(20) PRIMARY KEY,
  valor NUMBER(8)
