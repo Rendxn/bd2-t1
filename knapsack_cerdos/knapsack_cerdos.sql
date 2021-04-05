@@ -38,6 +38,14 @@ BEGIN
 
     available_pigs := pigs;
 
+    if(trucks.COUNT = 0) then
+        raise_application_error(-20001, 'La tabla CAMION está vacía.');
+    end if;
+
+    if(pigs.COUNT = 0) then
+        raise_application_error(-20001, 'La tabla CERDO está vacía.');
+    end if;
+
     -- For each truck, there's a Knapsack problem
     for t in 1..trucks.count
         loop
