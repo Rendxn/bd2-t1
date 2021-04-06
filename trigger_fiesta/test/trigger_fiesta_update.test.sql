@@ -30,3 +30,10 @@ commit;
 -- 3,Rozalie,572,69420,1
 update INDIVIDUO set CODIGO = 69420 where codigo = 1;
 commit;
+
+-- 1,Kristin,741,,2
+-- 69420,Kristin,743,,2
+-- 2,Graehme,33,69420,0
+-- 3,Rozalie,572,69420,1
+update INDIVIDUO set CODIGO = 69420, VALOR = VALOR + 5 where codigo = 1;
+commit;

@@ -1,8 +1,8 @@
 -- Punto e
 
-CREATE OR REPLACE TRIGGER valor_update_propagate_children
+CREATE OR REPLACE TRIGGER valor_update
     FOR UPDATE OF VALOR
-    ON INDIVIDUO
+    ON INDIVIDUO FOLLOWS CODIGO_UPDATE_CASCADE
 COMPOUND TRIGGER
 
     TYPE padre_valor_type IS record (
@@ -39,7 +39,7 @@ COMPOUND TRIGGER
                 -- Then it stores the `codigo` of this row and the rest of the increment
                 -- that will be added to his first child (hijo)
                 IF (:OLD.NRO_HIJOS > 0) THEN
-                    padre_valor(padre_valor.count + 1).padre_id := :OLD.CODIGO;
+                    padre_valor(padre_valor.count + 1).padre_id := :NEW.CODIGO;
                     padre_valor(padre_valor.count ).valor_restante := :NEW.VALOR - :OLD.VALOR - 2;
                 END IF;
                 -- Only increments by 2 the updated row.
@@ -66,4 +66,4 @@ COMPOUND TRIGGER
         end if;
     end after statement;
 
-END valor_update_propagate_children;
+END valor_update;
