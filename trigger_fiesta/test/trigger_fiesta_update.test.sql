@@ -4,7 +4,7 @@
 -- 2,Graehme,30,1,0
 -- 2,Graehme,33,1,0
 update INDIVIDUO set VALOR = VALOR + 5 where codigo = 1;
-commit;
+COMMIT;
 
 -- 2,Graehme,33,1,0
 -- 2,Graehme,35,1,0
@@ -15,25 +15,29 @@ commit;
 -- 4,Silvanus,120,3,1
 -- 4,Silvanus,123,3,1
 update INDIVIDUO set VALOR = VALOR + 5 where padre = 1;
-commit;
+COMMIT;
 
 -- 2,Graehme,35,1,0
 -- 2,Graehme,5,1,0
 -- 3,Rozalie,574,1,1
 -- 3,Rozalie,544,1,1
 update INDIVIDUO set VALOR = VALOR - 30 where padre = 1;
-commit;
+COMMIT;
 
 -- 1,Kristin,741,,2
 -- 69420,Kristin,741,,2
 -- 2,Graehme,30,69420,0
 -- 3,Rozalie,572,69420,1
 update INDIVIDUO set CODIGO = 69420 where codigo = 1;
-commit;
+COMMIT;
 
 -- 1,Kristin,741,,2
 -- 69420,Kristin,743,,2
 -- 2,Graehme,33,69420,0
 -- 3,Rozalie,572,69420,1
 update INDIVIDUO set CODIGO = 69420, VALOR = VALOR + 5 where codigo = 1;
-commit;
+COMMIT;
+
+
+update INDIVIDUO set CODIGO = 42069, VALOR = VALOR + 5 where codigo = 2;
+COMMIT;

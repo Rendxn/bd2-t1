@@ -44,7 +44,13 @@ CREATE OR REPLACE TRIGGER codigo_update_cascade
     BEGIN
         FOR p IN 1..originales.COUNT
             LOOP
-                if (new_old.exists(originales(p).PADRE)) then
+                -- Restore padre of updated row
+                if (new_old.exists(originales(p).CODIGO)) then
+                    if (originales(p).padre is not null) then
+                        UPDATE INDIVIDUO SET PADRE = originales(p).PADRE where CODIGO = new_old(originales(p).CODIGO).new_codigo;
+                    end if;
+                    -- Update children of updated row
+                elsif (new_old.exists(originales(p).PADRE)) then
                     if (originales(p).padre is not null and originales(p).padre = new_old(originales(p).PADRE).old_codigo) then
                         UPDATE INDIVIDUO SET PADRE = new_old(originales(p).PADRE).new_codigo where CODIGO = originales(p).CODIGO;
                     end if;
