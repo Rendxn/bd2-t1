@@ -1,6 +1,7 @@
 # Trabajo 1 de Bases de Datos 2 - 2021-1 en UNAL_MED
 
 **_Santiago Rendón Giraldo - Juan José Sapuyes_**
+*sarendongi@unal.edu.co - jsapuyesp@unal.edu.co*
 
 ## Introducción
 
