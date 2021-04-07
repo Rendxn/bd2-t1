@@ -6,6 +6,13 @@
 
 Este trabajo está desarollado con  _Oracle Database 11g Express Edition._  Se recomienda utilizar esta versión para la debida revisión. 
 
+**Nota:** Para probar el punto 1, ejecute primero el archivo `create_and_populate_tables_cerdo_and_camion` para crear la tabla cerdos y camiones con los valores de ejemplo. Después de esto, se podrá ejecutar sin problema el archivo `knapsack_cerdos`.
+   
+**Nota:** Para ejecutar el punto 2, es necesario ejecutar todos los archivos de la carpeta `trigger_fiesta` en el siguiente orden:
+1. `create_individuos_and_auxiliary_tables`
+2. `individuo_codigo_update_cascade`
+3. Aquí ya se puede ejecutar cualquiera de los archivos restantes sin importar su orden. Es necesario ejecutar todos antes de hacer las respectivas pruebas. 
+
 ## Punto 1
 
 Para resolver este problema, tomamos cada camión y lo interpretamos como un _0/1 Knapsack Problem_, [ver video](https://www.youtube.com/watch?v=xCbYmUPvc2Q).
@@ -98,7 +105,7 @@ CREATE TABLE auxiliary(
 
 insert into auxiliary (nombre, valor) values ('valor_update_level', 0);
 ```
-Creamos un `COMPOUND TRIGGER FOR UPDATE OF VALOR` y en el `BEFORE STATEMENT`guardamos el valor de `valor_update_level` de la tabla `auxiliary` el cual indica el nivel de recursión del `TRIGGER`.
+Creamos un `COMPOUND TRIGGER FOR UPDATE OF VALOR` y en el `BEFORE STATEMENT`guardamos el valor de `valor_update_level` de la tabla `auxiliary` el cual indica el nivel de recursión del `TRIGGER`. Es importante añadirle la sentencia `FOLLOWS codigo_update_trigger`, ya que importa el tiempo en que se ejecuta cada trigger. 
 
 Después en `BEFORE EACH ROW` verificamos las restricciones impuestas por el punto si el nivel de recursión es menor a 1 (que indica si este `update` fue llamado dentro del mismo `TRIGGER`) y si cumple con estas, se guarda el código del padre si tiene hijos, el restante del valor que debe ser sumado al primer hijo y se suma 2 a la fila actual. 
 
