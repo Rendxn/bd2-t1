@@ -19,6 +19,8 @@ DECLARE
     truck_weights    number_row;
     pigs_str         VARCHAR2(2000);
     truck_str        VARCHAR2(2000);
+    w                NUMBER;
+    res              NUMBER;
 
 BEGIN
     -- User input
@@ -67,20 +69,6 @@ BEGIN
                                 if (pigs(p).PESOKILOS + weights(p - 1)(wt - pigs(p).PESOKILOS) >
                                     weights(p - 1)(wt)) then
                                     weights(p)(wt) := pigs(p).PESOKILOS + weights(p - 1)(wt - pigs(p).PESOKILOS);
-                                    -- Pig is added
-                                    if (wt = max_weight) then
-                                        if (pigs_str is null or pigs(p).PESOKILOS = weights(p)(wt)) then
-                                            pigs_str := pigs(p).COD || ' (' || pigs(p).NOMBRE || ') ' ||
-                                                        pigs(p).PESOKILOS || 'kg';
-                                        else
-                                            pigs_str := pigs_str || ', ' || pigs(p).COD || ' (' || pigs(p).NOMBRE ||
-                                                        ') ' ||
-                                                        pigs(p).PESOKILOS || 'kg';
-                                        end if;
-
-                                        available_pigs.delete(p);
-                                    end if;
-                                    --
                                 else
                                     weights(p)(wt) := weights(p - 1)(wt);
                                 end if;
@@ -107,6 +95,40 @@ BEGIN
 
             -- Stores the weight that is put in the truck i
             truck_weights(t) := weights(pigs.count)(max_weight);
+            w := max_weight;
+            res := truck_weights(t);
+
+            for i in REVERSE 1 .. pigs.count LOOP
+                if (res <= 0) then
+                    exit;
+                    -- either the result comes from the
+                    -- top (K[i-1][w]) or from (val[i-1]
+                    -- + K[i-1] [w-wt[i-1]]) as in Knapsack
+                    -- table. If it comes from the latter
+                    -- one/ it means the item is included.
+                END IF;
+                if (res = weights(i - 1)(w)) then
+                    CONTINUE;
+                else
+                     -- This item is included.
+                    if (pigs_str is null) then
+                        pigs_str := pigs(i).COD || ' (' || pigs(i).NOMBRE ||
+                                                        ') ' ||
+                                                        pigs(i).PESOKILOS || 'kg';
+                    else
+                        pigs_str := pigs_str || ', ' || pigs(i).COD || ' (' || pigs(i).NOMBRE ||
+                                                        ') ' ||
+                                                        pigs(i).PESOKILOS || 'kg';
+                    end if;
+
+                    available_pigs.delete(i);
+
+                    -- Since this weight is included
+                    -- its value is deducted
+                    res := res - pigs(i).PESOKILOS;
+                    w := w - pigs(i).PESOKILOS;
+                END IF;
+            END LOOP;
 
             -- Prints header only for the first truck.
             if (t = 1) then
